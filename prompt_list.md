@@ -172,7 +172,6 @@ Starting from the existing “ItsFine” SwiftUI project, add a “Headline” s
 - var title: String
 - var url: String
 - var date: Date
-- var transformationLevel: Int
 
 Create a ContentView in Views/ that displays a static array of 5 Headline objects in a List. Use SwiftUI’s Text elements to show each headline’s title. Just show placeholder data for now. Ensure the app runs and displays the list without errors.
 ```
