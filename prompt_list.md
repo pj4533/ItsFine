@@ -181,11 +181,13 @@ Create a ContentView in Views/ that displays a static array of 5 Headline object
 ### **Prompt 3: RSSService Implementation**
 
 ```text
-Add a new file Services/RSSService.swift. Create a class RSSService with a method:
+Add a new file RSSService.swift. Create a class RSSService with a method:
 
 func fetchHeadlines(completion: @escaping (Result<[Headline], Error>) -> Void)
 
-Inside, hardcode a URL string to a known RSS feed. Use URLSession to download the RSS data, then parse it using Foundation’s XMLParser. Extract the first 10 headlines with their title, link, and publication date. If parsing fails, return an error. If the feed is empty, return an empty array. Use OSLog to log any errors. Finally, call completion with the headlines or error. Provide all the code for this class, including the necessary XMLParserDelegate implementation.
+Inside, hardcode a URL string to this RSS feed: https://rss.politico.com/politics-news.xml      Use URLSession to download the RSS data, then parse it using Foundation’s XMLParser. Extract the first 10 headlines with their title, link, and publication date. If parsing fails, return an error. If the feed is empty, return an empty array. Use OSLog to log any errors. Finally, call completion with the headlines or error. Provide all the code for this class, including the necessary XMLParserDelegate implementation.
+
+Put the source file along side other sources 
 ```
 
 ---
