@@ -61,7 +61,7 @@ struct ContentView: View {
                                 .font(.headline)
                                 .foregroundColor(.primary)
                                 .onTapGesture {
-                                    logger.debug("Tapped on headline: \(headline.title)")
+                                    // Optional: Handle headline tap if needed
                                 }
                             Text(headline.url)
                                 .font(.subheadline)
@@ -89,6 +89,12 @@ struct ContentView: View {
                     .navigationTitle("Headlines")
                 }
             }
+            .background(
+                ShakeDetectorView {
+                    print("Gesture detected!")
+                    logger.info("SHAKE gesture detected!")
+                }
+            )
         }
         .onAppear {
             logger.info("ContentView appeared.")
@@ -99,5 +105,58 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+// MARK: - Shake Gesture Detection
+
+struct ShakeDetectorView: UIViewControllerRepresentable {
+    var onShake: () -> Void
+    
+    class Coordinator: NSObject {
+        var onShake: () -> Void
+        
+        init(onShake: @escaping () -> Void) {
+            self.onShake = onShake
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onShake: onShake)
+    }
+    
+    func makeUIViewController(context: Context) -> ShakeDetectorViewController {
+        let viewController = ShakeDetectorViewController()
+        viewController.onShake = context.coordinator.onShake
+        return viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: ShakeDetectorViewController, context: Context) {
+        // No update needed
+    }
+}
+
+class ShakeDetectorViewController: UIViewController {
+    var onShake: (() -> Void)?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Make the view transparent
+        view.backgroundColor = .clear
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.becomeFirstResponder()
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            onShake?()
+        }
     }
 }
