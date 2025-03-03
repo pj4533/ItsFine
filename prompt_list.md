@@ -187,7 +187,7 @@ func fetchHeadlines(completion: @escaping (Result<[Headline], Error>) -> Void)
 
 Inside, hardcode a URL string to this RSS feed: https://rss.politico.com/politics-news.xml      Use URLSession to download the RSS data, then parse it using Foundation’s XMLParser. Extract the first 10 headlines with their title, link, and publication date. If parsing fails, return an error. If the feed is empty, return an empty array. Use OSLog to log any errors. Finally, call completion with the headlines or error. Provide all the code for this class, including the necessary XMLParserDelegate implementation.
 
-Put the source file along side other sources 
+Use async/await wherever possible. Do not use Combine.
 ```
 
 ---
@@ -195,7 +195,7 @@ Put the source file along side other sources
 ### **Prompt 4: HeadlinesViewModel**
 
 ```text
-Create HeadlinesViewModel in ViewModels/HeadlinesViewModel.swift with these features:
+Create HeadlinesViewModel with these features:
 - A published array of Headline called “headlines”.
 - A published Bool called “isLoading” initialized to false.
 - A published String? called “errorMessage”.
