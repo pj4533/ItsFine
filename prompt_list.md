@@ -211,7 +211,7 @@ Then update ContentView so it uses HeadlinesViewModel as an @StateObject or @Obs
 ### **Prompt 5: Gesture Detection**
 
 ```text
-Integrate gesture detection. Because testing a flip gesture in the simulator is tricky, let’s implement a double-tap gesture on the list (or a button) for now. When double-tapped, print “Gesture detected!” in the console. Provide updated code for ContentView that includes this gesture. Provide the relevant code updates in HeadlinesViewModel if needed. Keep isLoading, errorMessage, etc. from the previous code.
+Integrate gesture detection. Lets use a SHAKE gesture for now, since that it easy to test in the simulator. When a SHAKE happens, print “Gesture detected!” in the console. Provide updated code for ContentView that includes this gesture. Provide the relevant code updates in HeadlinesViewModel if needed. Keep isLoading, errorMessage, etc. from the previous code.
 ```
 
 ---
