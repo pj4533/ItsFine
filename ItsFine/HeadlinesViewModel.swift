@@ -33,4 +33,23 @@ class HeadlinesViewModel: ObservableObject {
             }
         }
     }
+    
+    func transformHeadlines() {
+        logger.info("Transforming headlines using OpenAIDataSource...")
+        isLoading = true
+        OpenAIDataSource.shared.transformHeadlines(headlines) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.isLoading = false
+                switch result {
+                case .success(let transformedHeadlines):
+                    self.headlines = transformedHeadlines
+                    self.logger.info("Successfully transformed headlines. Total: \(transformedHeadlines.count)")
+                case .failure(let error):
+                    self.errorMessage = error.localizedDescription
+                    self.logger.error("Failed to transform headlines: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 }

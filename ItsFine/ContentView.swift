@@ -91,8 +91,8 @@ struct ContentView: View {
             }
             .background(
                 ShakeDetectorView {
-                    print("Gesture detected!")
-                    logger.info("SHAKE gesture detected!")
+                    logger.info("SHAKE gesture detected! Transforming headlines...")
+                    viewModel.transformHeadlines()
                 }
             )
         }
