@@ -54,7 +54,6 @@ class RSSService: NSObject {
             
             // Extract the <rss>...</rss> portion
             let rssContent = String(htmlString[rssStartRange.lowerBound..<rssEndRange.upperBound])
-            self.logger.debug("Extracted <rss> content: \(rssContent)")
             self.logger.info("Extracted <rss> content. Length: \(rssContent.count) characters.")
             
             // Convert back to Data for XMLParser
