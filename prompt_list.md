@@ -233,9 +233,9 @@ Then create a method in HeadlinesViewModel called transformAllHeadlines(). Set i
 ### **Prompt 7: Basic Animation & Integration**
 
 ```text
-Add a simple SwiftUI animation that “distorts” the text while isLoading = true. For example, you can apply a repeating animation that randomly shifts the text’s offset or applies a blur effect. Use SwiftUI’s .animation modifiers. Once isLoading = false, transition back to normal text.
+Add a simple SwiftUI animation that “distorts” the headline text for 0.5s. For example, you can apply a repeating animation that randomly shifts the text’s offset or applies a blur effect. Use SwiftUI’s .animation modifiers. Once the 0.5s is up, transition back to normal text.
 
-Update ContentView so that headlines appear distorted while the transform call is in progress, and smoothly return to normal once it completes.
+Update ContentView so that headlines appear distorted while the animation is in progress, and smoothly return to normal once it completes.
 ```
 
 ---
