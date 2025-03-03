@@ -10,7 +10,6 @@ class RSSService: NSObject {
     private var currentTitle: String = ""
     private var currentLink: String = ""
     private var currentDate: Date = Date()
-    private var count: Int = 0
     
     func fetchHeadlines(completion: @escaping (Result<[Headline], Error>) -> Void) {
         logger.info("Starting to fetch headlines from RSS feed.")
@@ -93,7 +92,10 @@ class RSSService: NSObject {
 extension RSSService: XMLParserDelegate {
     func parserDidStartDocument(_ parser: XMLParser) {
         headlines = []
-        count = 0
+        currentElement = ""
+        currentTitle = ""
+        currentLink = ""
+        currentDate = Date()
         logger.info("XMLParser started parsing document.")
     }
     
@@ -151,12 +153,7 @@ extension RSSService: XMLParserDelegate {
         if elementName == "item" {
             let headline = Headline(title: currentTitle, url: currentLink, date: currentDate)
             headlines.append(headline)
-            count += 1
             logger.info("Added headline: \(headline.title). Total headlines: \(self.headlines.count)")
-            if count >= 10 {
-                logger.info("Reached 10 headlines. Aborting parsing.")
-                parser.abortParsing()
-            }
         }
     }
 }
