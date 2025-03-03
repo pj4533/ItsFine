@@ -28,11 +28,11 @@ class OpenAIDataSource {
         case 1:
             promptModifier = ""
         case 2:
-            promptModifier = "MORE optimistic..."
+            promptModifier = "MORE satirical optimism..."
         case 3:
-            promptModifier = "Even MORE optimistic..."
+            promptModifier = "Even MORE satirical optimism..."
         case 4:
-            promptModifier = "The very MOST optimisitic..."
+            promptModifier = "The very MOST satirical optimism..."
         default:
             promptModifier = "Totally unhinged absolutely satirical level of optimism"
         }
