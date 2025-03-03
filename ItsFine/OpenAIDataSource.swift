@@ -12,20 +12,39 @@ class OpenAIDataSource {
     }
     
     private var messages: [[String: String]] = []
+    private var transformCallCount: Int = 0
     
     private let apiKey = APIKeys.openAIKey
     private let apiURL = URL(string: "https://api.openai.com/v1/chat/completions")!
     private let model = "gpt-4o" // Ensure this is the correct model name
     
     func transformHeadlines(_ headlines: [Headline], completion: @escaping (Result<[Headline], Error>) -> Void) {
-        // Construct the headlines string
+        // Increment the transform call count
+        transformCallCount += 1
+        
+        // Determine the optimization level based on the number of calls
+        let promptModifier: String
+        switch transformCallCount {
+        case 1:
+            promptModifier = ""
+        case 2:
+            promptModifier = "MORE optimistic..."
+        case 3:
+            promptModifier = "Even MORE optimistic..."
+        case 4:
+            promptModifier = "The very MOST optimisitic..."
+        default:
+            promptModifier = "Totally unhinged absolutely satirical level of optimism"
+        }
+        
+        // Construct the user message with the prompt modifier
         let headlinesText = headlines.map { $0.title }.joined(separator: "\n")
-        let userMessage = "Here are the headlines:\n\(headlinesText)"
+        let fullUserMessage = (promptModifier.isEmpty ? "" : "\(promptModifier)\n") + "Here are the headlines:\n\(headlinesText)"
         
         // Append user message to the conversation
         messages.append([
             "role": "user",
-            "content": userMessage
+            "content": fullUserMessage
         ])
         
         // Prepare the request
