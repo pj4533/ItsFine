@@ -144,7 +144,7 @@ extension RSSService: XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if elementName == "item" {
-            let headline = Headline(title: currentTitle, url: currentLink, date: currentDate)
+            let headline = Headline(id: UUID(), title: currentTitle, url: currentLink, date: currentDate)
             headlines.append(headline)
             logger.info("Added headline: \(headline.title). Total headlines: \(self.headlines.count)")
         }
