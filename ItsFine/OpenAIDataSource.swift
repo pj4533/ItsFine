@@ -13,7 +13,7 @@ class OpenAIDataSource {
     
     private var messages: [[String: String]] = []
     
-    private let apiKey = "YOUR_OPENAI_API_KEY" // Replace with your actual OpenAI API key
+    private let apiKey = APIKeys.openAIKey
     private let apiURL = URL(string: "https://api.openai.com/v1/chat/completions")!
     private let model = "gpt-4o" // Ensure this is the correct model name
     
