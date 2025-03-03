@@ -80,9 +80,6 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                         }
                         .padding(.vertical, 4)
-                        .onAppear {
-                            logger.debug("Displaying headline: \(headline.title)")
-                        }
                     }
                     .listStyle(PlainListStyle())
                     .refreshable {

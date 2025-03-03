@@ -112,12 +112,10 @@ extension RSSService: XMLParserDelegate {
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
         currentElement = elementName
-        logger.debug("Started element: \(elementName)")
         if elementName == "item" {
             currentTitle = ""
             currentLink = ""
             currentDate = Date()
-            logger.debug("Initialized new item.")
         }
     }
     
@@ -128,17 +126,14 @@ extension RSSService: XMLParserDelegate {
         switch currentElement {
         case "title":
             currentTitle += trimmedString
-            logger.debug("Found title: \(trimmedString)")
         case "link":
             currentLink += trimmedString
-            logger.debug("Found link: \(trimmedString)")
         case "pubDate":
             let formatter = DateFormatter()
             formatter.locale = Locale(identifier: "en_US_POSIX")
             formatter.dateFormat = "E, d MMM yyyy HH:mm:ss z"
             if let date = formatter.date(from: trimmedString) {
                 currentDate = date
-                logger.debug("Parsed pubDate: \(date)")
             } else {
                 logger.error("Date parsing failed for string: \(trimmedString)")
             }
@@ -148,7 +143,6 @@ extension RSSService: XMLParserDelegate {
     }
     
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        logger.debug("Ended element: \(elementName)")
         if elementName == "item" {
             let headline = Headline(title: currentTitle, url: currentLink, date: currentDate)
             headlines.append(headline)
