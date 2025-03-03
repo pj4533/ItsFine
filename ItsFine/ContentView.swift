@@ -10,6 +10,9 @@ struct ContentView: View {
     @State private var randomOffsetY: CGFloat = 0
     @State private var randomBlur: CGFloat = 0
     
+    // Animation duration constant
+    private let animationDuration: Double = 1.0
+    
     var body: some View {
         NavigationView {
             Group {
@@ -66,7 +69,7 @@ struct ContentView: View {
                                 .foregroundColor(.primary)
                                 .blur(radius: animateDistortion ? randomBlur : 0)
                                 .offset(x: animateDistortion ? randomOffsetX : 0, y: animateDistortion ? randomOffsetY : 0)
-                                .animation(.easeInOut(duration: 0.5), value: animateDistortion)
+                                .animation(.easeInOut(duration: animationDuration), value: animateDistortion)
                                 .onTapGesture {
                                     // Optional: Handle headline tap if needed
                                 }
@@ -118,8 +121,8 @@ struct ContentView: View {
         // Start the animation
         animateDistortion = true
         
-        // Revert the animation after 0.5 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        // Revert the animation after the specified duration
+        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
             animateDistortion = false
         }
     }
