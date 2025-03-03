@@ -9,6 +9,8 @@ struct ContentView: View {
     @State private var randomOffsetX: CGFloat = 0
     @State private var randomOffsetY: CGFloat = 0
     @State private var randomBlur: CGFloat = 0
+    @State private var randomRotation: Double = 0
+    @State private var randomOpacity: Double = 1.0
     
     // Animation duration constant
     private let animationDuration: Double = 1.0
@@ -69,6 +71,8 @@ struct ContentView: View {
                                 .foregroundColor(.primary)
                                 .blur(radius: animateDistortion ? randomBlur : 0)
                                 .offset(x: animateDistortion ? randomOffsetX : 0, y: animateDistortion ? randomOffsetY : 0)
+                                .rotationEffect(.degrees(animateDistortion ? randomRotation : 0))
+                                .opacity(animateDistortion ? randomOpacity : 1.0)
                                 .animation(.easeInOut(duration: animationDuration), value: animateDistortion)
                                 .onTapGesture {
                                     // Optional: Handle headline tap if needed
@@ -113,10 +117,12 @@ struct ContentView: View {
     }
     
     private func triggerDistortionAnimation() {
-        // Generate random values for offset and blur
-        randomOffsetX = CGFloat.random(in: -10...10)
-        randomOffsetY = CGFloat.random(in: -5...5)
-        randomBlur = CGFloat.random(in: 2...5)
+        // Generate random values for offset, blur, rotation, and opacity
+        randomOffsetX = CGFloat.random(in: -20...20)
+        randomOffsetY = CGFloat.random(in: -10...10)
+        randomBlur = CGFloat.random(in: 5...15)
+        randomRotation = Double.random(in: -15...15)
+        randomOpacity = Double.random(in: 0.5...0.8)
         
         // Start the animation
         animateDistortion = true
@@ -124,6 +130,12 @@ struct ContentView: View {
         // Revert the animation after the specified duration
         DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration) {
             animateDistortion = false
+            // Reset random values to defaults
+            randomOffsetX = 0
+            randomOffsetY = 0
+            randomBlur = 0
+            randomRotation = 0
+            randomOpacity = 1.0
         }
     }
 }
