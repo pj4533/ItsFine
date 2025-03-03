@@ -7,7 +7,7 @@ class OpenAIDataSource {
         // Initialize with the system message
         messages.append([
             "role": "system",
-            "content": "You are a headline conversion agent. You convert headlines to be more like what the user wants to read. The output is meant to be satire.\n\nMake the headlines a bit easier to read, less alarming, less dire. Put an optimistic spin on the headlines."
+            "content": "You are a headline conversion agent. You convert headlines to be more like what the user wants to read. The output is meant to be satire.\n\nMake the headlines a bit easier to read, less alarming, less dire. Put an optimistic spin on the headlines. Dont add any extra text, only output the headlines."
         ])
     }
     
