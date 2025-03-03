@@ -102,8 +102,21 @@ class OpenAIDataSource {
                     "content": assistantMessage
                 ])
                 
-                // Convert assistant message to [Headline]
-                let transformedHeadlines = self.parseHeadlines(from: assistantMessage)
+                // Parse the transformed titles
+                let transformedTitles = self.parseHeadlines(from: assistantMessage)
+                
+                // Ensure the number of transformed titles matches the original headlines
+                guard transformedTitles.count == headlines.count else {
+                    let countError = NSError(domain: "OpenAIDataSource", code: -4, userInfo: [NSLocalizedDescriptionKey: "Transformed headlines count does not match original headlines count"])
+                    completion(.failure(countError))
+                    return
+                }
+                
+                // Combine transformed titles with original URLs and dates
+                let transformedHeadlines = zip(transformedTitles, headlines).map { transformedTitle, originalHeadline in
+                    Headline(id: originalHeadline.id, title: transformedTitle, url: originalHeadline.url, date: originalHeadline.date)
+                }
+                
                 completion(.success(transformedHeadlines))
                 
             } catch {
@@ -114,48 +127,39 @@ class OpenAIDataSource {
         task.resume()
     }
     
-    private func parseHeadlines(from text: String) -> [Headline] {
+    private func parseHeadlines(from text: String) -> [String] {
         // Implement a simple parser to extract headlines from the assistant's response
         // This assumes that the assistant returns headlines separated by newlines
         // Adjust the parsing logic based on the actual response format
         let lines = text.split(separator: "\n").map { String($0) }
-        var transformedHeadlines: [Headline] = []
-        
-        for line in lines {
-            if !line.trimmingCharacters(in: .whitespaces).isEmpty {
-                let headline = Headline(id: UUID(), title: line, url: "", date: Date())
-                transformedHeadlines.append(headline)
-            }
-        }
-        
-        return transformedHeadlines
+        return lines.filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
     }
-}
-
-// Models for parsing OpenAI API responses
-
-struct OpenAIResponse: Codable {
-    let id: String
-    let object: String
-    let created: Int
-    let model: String
-    let choices: [Choice]
-    let usage: Usage
-}
-
-struct Choice: Codable {
-    let index: Int
-    let message: Message
-    let finishReason: String?
-}
-
-struct Message: Codable {
-    let role: String
-    let content: String
-}
-
-struct Usage: Codable {
-    let promptTokens: Int
-    let completionTokens: Int
-    let totalTokens: Int
+    
+    // Models for parsing OpenAI API responses
+    
+    struct OpenAIResponse: Codable {
+        let id: String
+        let object: String
+        let created: Int
+        let model: String
+        let choices: [Choice]
+        let usage: Usage
+    }
+    
+    struct Choice: Codable {
+        let index: Int
+        let message: Message
+        let finishReason: String?
+    }
+    
+    struct Message: Codable {
+        let role: String
+        let content: String
+    }
+    
+    struct Usage: Codable {
+        let promptTokens: Int
+        let completionTokens: Int
+        let totalTokens: Int
+    }
 }
