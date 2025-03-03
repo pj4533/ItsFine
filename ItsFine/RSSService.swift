@@ -3,7 +3,7 @@ import os.log
 
 class RSSService: NSObject {
     private let logger = Logger(subsystem: "ItsFine.RSSService", category: "RSSService")
-    private let rssURL = URL(string: "https://rss.politico.com/politics-news.xml")!
+    private let rssURL = URL(string: "https://rss.politico.com/congress.xml")!
     
     private var headlines: [Headline] = []
     private var currentElement: String = ""
