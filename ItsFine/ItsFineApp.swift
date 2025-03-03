@@ -10,9 +10,14 @@ import OSLog
 
 @main
 struct ItsFineApp: App {
+    private let logger = Logger(subsystem: "ItsFine.ItsFineApp", category: "ItsFineApp")
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    logger.info("ItsFineApp started and ContentView is presented.")
+                }
         }
     }
 }

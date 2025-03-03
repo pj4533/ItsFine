@@ -60,13 +60,19 @@ struct ContentView: View {
                             Text(headline.title)
                                 .font(.headline)
                                 .foregroundColor(.primary)
+                                .onTapGesture {
+                                    logger.debug("Tapped on headline: \(headline.title)")
+                                }
                             Text(headline.url)
                                 .font(.subheadline)
                                 .foregroundColor(.blue)
                                 .lineLimit(1)
                                 .onTapGesture {
                                     if let url = URL(string: headline.url) {
+                                        logger.debug("Opening URL: \(headline.url)")
                                         UIApplication.shared.open(url)
+                                    } else {
+                                        logger.error("Invalid URL: \(headline.url)")
                                     }
                                 }
                             Text(headline.date, style: .date)
