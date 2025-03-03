@@ -151,7 +151,7 @@ extension RSSService: XMLParserDelegate {
             let headline = Headline(title: currentTitle, url: currentLink, date: currentDate)
             headlines.append(headline)
             count += 1
-            logger.info("Added headline: \(headline.title). Total headlines: \(headlines.count)")
+            logger.info("Added headline: \(headline.title). Total headlines: \(self.headlines.count)")
             if count >= 10 {
                 logger.info("Reached 10 headlines. Aborting parsing.")
                 parser.abortParsing()

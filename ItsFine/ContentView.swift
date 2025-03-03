@@ -1,6 +1,9 @@
 import SwiftUI
+import OSLog
 
 struct ContentView: View {
+    private let logger = Logger(subsystem: "ItsFine.ContentView", category: "ContentView")
+    
     @StateObject var viewModel = HeadlinesViewModel()
     
     var body: some View {
@@ -95,5 +98,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
-private let logger = Logger(subsystem: "ItsFine.ContentView", category: "ContentView")
