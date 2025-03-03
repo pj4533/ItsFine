@@ -6,15 +6,26 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             if viewModel.isLoading {
-                ProgressView()
+                ProgressView("Loading Headlines...")
                     .navigationTitle("Headlines")
             } else if let error = viewModel.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .padding()
-                    .navigationTitle("Headlines")
+                VStack {
+                    Text("Error: \(error)")
+                        .foregroundColor(.red)
+                        .padding()
+                    Button(action: {
+                        viewModel.fetchHeadlines()
+                    }) {
+                        Text("Retry")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                    }
+                }
+                .navigationTitle("Headlines")
             } else {
-                List(viewModel.headlines, id: \.title) { headline in
+                List(viewModel.headlines) { headline in
                     VStack(alignment: .leading) {
                         Text(headline.title)
                             .font(.headline)
@@ -22,11 +33,19 @@ struct ContentView: View {
                             .font(.subheadline)
                             .foregroundColor(.blue)
                             .lineLimit(1)
+                            .onTapGesture {
+                                if let url = URL(string: headline.url) {
+                                    UIApplication.shared.open(url)
+                                }
+                            }
                         Text(headline.date, style: .date)
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                     .padding(.vertical, 4)
+                }
+                .refreshable {
+                    viewModel.fetchHeadlines()
                 }
                 .navigationTitle("Headlines")
             }

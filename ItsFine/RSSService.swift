@@ -27,7 +27,35 @@ class RSSService: NSObject {
                 return
             }
             
-            let parser = XMLParser(data: data)
+            // Convert data to string to extract <rss>...</rss>
+            guard let htmlString = String(data: data, encoding: .utf8) else {
+                let encodingError = NSError(domain: "RSSService", code: -4, userInfo: [NSLocalizedDescriptionKey: "Data encoding failed"])
+                self?.logger.error("Data encoding failed")
+                completion(.failure(encodingError))
+                return
+            }
+            
+            // Find the <rss> start and end
+            guard let rssStartRange = htmlString.range(of: "<rss", options: .caseInsensitive),
+                  let rssEndRange = htmlString.range(of: "</rss>", options: .caseInsensitive) else {
+                let invalidFormatError = NSError(domain: "RSSService", code: -3, userInfo: [NSLocalizedDescriptionKey: "RSS feed is not properly formatted"])
+                self?.logger.error("RSS feed is not properly formatted. Cannot find <rss> tags.")
+                completion(.failure(invalidFormatError))
+                return
+            }
+            
+            // Extract the <rss>...</rss> portion
+            let rssContent = String(htmlString[rssStartRange.lowerBound..<rssEndRange.upperBound])
+            
+            // Convert back to Data for XMLParser
+            guard let rssData = rssContent.data(using: .utf8) else {
+                let dataConversionError = NSError(domain: "RSSService", code: -5, userInfo: [NSLocalizedDescriptionKey: "Failed to convert RSS content to Data"])
+                self?.logger.error("Failed to convert RSS content to Data")
+                completion(.failure(dataConversionError))
+                return
+            }
+            
+            let parser = XMLParser(data: rssData)
             parser.delegate = self
             if !parser.parse() {
                 if let parserError = parser.parserError {
