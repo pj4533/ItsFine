@@ -5,6 +5,10 @@ struct ContentView: View {
     private let logger = Logger(subsystem: "ItsFine.ContentView", category: "ContentView")
     
     @StateObject var viewModel = HeadlinesViewModel()
+    @State private var animateDistortion: Bool = false
+    @State private var randomOffsetX: CGFloat = 0
+    @State private var randomOffsetY: CGFloat = 0
+    @State private var randomBlur: CGFloat = 0
     
     var body: some View {
         NavigationView {
@@ -60,6 +64,9 @@ struct ContentView: View {
                             Text(headline.title)
                                 .font(.headline)
                                 .foregroundColor(.primary)
+                                .blur(radius: animateDistortion ? randomBlur : 0)
+                                .offset(x: animateDistortion ? randomOffsetX : 0, y: animateDistortion ? randomOffsetY : 0)
+                                .animation(.easeInOut(duration: 0.5), value: animateDistortion)
                                 .onTapGesture {
                                     // Optional: Handle headline tap if needed
                                 }
@@ -91,13 +98,29 @@ struct ContentView: View {
             }
             .background(
                 ShakeDetectorView {
-                    logger.info("SHAKE gesture detected! Transforming headlines...")
+                    logger.info("SHAKE gesture detected! Transforming headlines and triggering animation...")
+                    triggerDistortionAnimation()
                     viewModel.transformHeadlines()
                 }
             )
         }
         .onAppear {
             logger.info("ContentView appeared.")
+        }
+    }
+    
+    private func triggerDistortionAnimation() {
+        // Generate random values for offset and blur
+        randomOffsetX = CGFloat.random(in: -10...10)
+        randomOffsetY = CGFloat.random(in: -5...5)
+        randomBlur = CGFloat.random(in: 2...5)
+        
+        // Start the animation
+        animateDistortion = true
+        
+        // Revert the animation after 0.5 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            animateDistortion = false
         }
     }
 }
